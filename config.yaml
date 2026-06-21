@@ -1,0 +1,45 @@
+# ----------------------------------------------------
+# Configuration for SGX Derivatives Data Downloader
+# ----------------------------------------------------
+
+# Directory where all downloaded files will be stored.
+# The script will create this directory if it doesn't exist.
+download_directory: "sgx_data"
+
+# URL patterns for downloading files.
+# {date} will be replaced with YYYYMMDD format.
+files:
+  dated_patterns:
+    - "https://links.sgx.com/1.0.0/derivatives-historical/{date}/WEBPXTICK_DT.zip"
+    - "https://links.sgx.com/1.0.0/derivatives-historical/{date}/TC.txt"
+  static_urls:
+    - name: "TickData_structure.dat"
+      url: "https://www.sgx.com/ntan/TickDataStructure.dat"
+    - name: "TC_structure.dat"
+      url: "https://www.sgx.com/ntan/TC_structure.dat"
+
+# Network settings for the downloader.
+network:
+  # Timeout for each HTTP request in seconds.
+  timeout_seconds: 300
+  # Delay between download requests when processing a date range.
+  request_delay_seconds: 2
+  # User-Agent to send with HTTP requests to identify our client.
+  user_agent: "SGX-Data-Downloader/1.1 (Python)"
+
+# Retry logic for transient network or server errors (e.g., HTTP 5xx).
+retry:
+  # Total number of retry attempts for a failed download.
+  max_retries: 3
+  # Delay for the first retry in seconds. Subsequent retries will wait longer.
+  # e.g., 5s, 10s, 20s for a factor of 5 and max_retries of 3.
+  backoff_factor: 5
+
+# Logging configuration.
+logging:
+  # Path to the log file.
+  log_file: "logs/sgx_downloader.log"
+  # Log level for console output. Options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  log_level_console: "INFO"
+  # Log level for file output. DEBUG is recommended for troubleshooting.
+  log_level_file: "DEBUG"
